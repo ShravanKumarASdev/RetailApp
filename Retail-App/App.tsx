@@ -17,6 +17,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textContainer: {
-    color: 'red'
+    color: 'black'
   }
 });
