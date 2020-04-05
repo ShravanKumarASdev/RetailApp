@@ -28,6 +28,31 @@ export default class LoginView extends Component {
     }
   }
   onClickListener = (viewId) => {
+    //Calling get api endpoint
+    fetch('http://192.168.1.10:3001/Users').then((response) => {return response.json()})
+    .then(response=>alert(JSON.stringify(response)))
+    .catch((error) => {
+            console.error(error);
+          });
+
+
+
+    //Calling Post api endpoint
+    fetch("http://192.168.1.10:3001/Users/Authenticate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userNm :"New User",
+        userPwd: "TempPwd"
+      })
+    })
+      .then(response => response.json())
+      .then(response => {
+        alert('hi'+JSON.stringify(response));
+      })
+      .catch(error => alert("Error " + error));
     Alert.alert("Alert", "Button pressed "+viewId);
   }
 
@@ -40,7 +65,7 @@ export default class LoginView extends Component {
               placeholder="Email"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
-              onChangeText={(email) => {this.setState({email}),()=>{console.log('mona'+this.state['email'])}}}/>
+              onChangeText={(email) => {this.setState({email}),(()=>{console.log('mona'+this.state['email'])})();}}/>
         </View>
         
         <View style={styles.inputContainer}>
