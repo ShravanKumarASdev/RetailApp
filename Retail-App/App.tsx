@@ -6,6 +6,7 @@ import {
   TextInput,
   Button,
   TouchableHighlight,
+  TouchableOpacity,
   Image,
   Alert
 } from 'react-native';
@@ -35,8 +36,6 @@ export default class LoginView extends Component {
             console.error(error);
           });
 
-
-
     //Calling Post api endpoint
     fetch("http://192.168.1.10:3001/Users/Authenticate", {
       method: "POST",
@@ -59,6 +58,13 @@ export default class LoginView extends Component {
   render() {
     return (
       <View style={styles.container}>
+
+        {/* Move tile to a different component */}
+        <TouchableOpacity style={styles.card}>
+            <Image style={styles.cardImage} source={{uri:'https://tse4.mm.bing.net/th?id=OIP.GEFF6V-bR5WM7mn5xTO0tAHaHa&pid=Api&P=0&w=300&h=300'}}/>
+            <Text style={styles.cardText}>Product Name</Text>
+            <Text style={styles.cardText}>Rating</Text>
+        </TouchableOpacity>
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
           <TextInput style={styles.inputs}
@@ -95,6 +101,33 @@ export default class LoginView extends Component {
 
 
 const styles = StyleSheet.create({
+  card:{
+    backgroundColor:'#fff',
+    marginBottom:10,
+    marginLeft:'2%',
+    width:'45%',
+    height:'30%',
+    shadowColor:'#000',
+    borderRadius:5,
+    shadowOpacity:0.2,
+    shadowRadius:3,
+    shadowOffset:{
+      width:3,
+      height:3
+    }
+  },
+  cardImage:{
+    marginTop:'1%',
+    width:'100%',
+    height:'80%',
+    resizeMode:'cover'
+  },
+  cardText:{
+    color: '#a9a9a9',
+    fontSize:12,
+    height:'10%',
+    paddingLeft:15
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
