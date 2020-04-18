@@ -21,14 +21,14 @@ export default class LoginView extends Component {
   }
   onClickListener = (viewId) => {
     //Calling get api endpoint
-    fetch('http://192.168.1.10:3001/Users').then((response) => {return response.json()})
+    fetch('http://192.168.1.5:3001/Users').then((response) => {return response.json()})
     .then(response=>alert(JSON.stringify(response)))
     .catch((error) => {
             console.error(error);
           });
 
     //Calling Post api endpoint
-    fetch("http://192.168.1.10:3001/Users/Authenticate", {
+    fetch("http://192.168.1.5:3001/Users/Authenticate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
