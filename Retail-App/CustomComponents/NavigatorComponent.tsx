@@ -45,10 +45,6 @@ render(){
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={this.LoginScreen} />
         <Drawer.Screen name="Notifications" component={this.NotificationsScreen} />
-        <Drawer.Screen name="SignOut" component={this.LoginScreen} />
         <Drawer.Screen name="Register" component={this.RegisterScreen} />
       </Drawer.Navigator>
-    </NavigationContainer>
-    );  
-}
 }
