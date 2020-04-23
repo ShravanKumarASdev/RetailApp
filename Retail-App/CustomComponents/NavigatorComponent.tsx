@@ -2,6 +2,8 @@ import React,{ Component } from 'react';
 import { Button, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import LoginView from './LoginComponent';
+import RegisterUser from './Register';
 
 export default class NavigatorComponent extends Component {
 
@@ -24,13 +26,27 @@ export default class NavigatorComponent extends Component {
   );
 }
 
+LoginScreen({ navigation }) {
+  return (
+   <LoginView/>
+  );
+}
+RegisterScreen({ navigation }) {
+  return (
+   <RegisterUser/>
+  );
+}
+
+
 render(){
     const Drawer = createDrawerNavigator();
     return(
         <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={this.HomeScreen} />
+        <Drawer.Screen name="Home" component={this.LoginScreen} />
         <Drawer.Screen name="Notifications" component={this.NotificationsScreen} />
+        <Drawer.Screen name="SignOut" component={this.LoginScreen} />
+        <Drawer.Screen name="Register" component={this.RegisterScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
     );  
