@@ -10,41 +10,96 @@ import {
   Image,
   Alert
 } from 'react-native';
+import RegisterUser from './Register';
+import { NavigationContainer } from '@react-navigation/native';
 export default class LoginView extends Component {
+  [x: string]: any;
 
   constructor(props) {
     super(props);
     this.state = {
-      email   : '',
+      Username   : '',
       password: '',
     }
   }
   onClickListener = (viewId) => {
+    alert("this"+viewId);
+    if(viewId=='login')
+    {
+      //Calling Post api endpoint
+    fetch('http://localhost:3001/Users/Authenticate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin' : '*'
+      },
+      body: JSON.stringify({
+        userNm : this.state.Username,
+        userPwd: this.state.password  
+      })
+    })
+      .then(response => {return response.json()})
+      .then(response => {
+        alert('bae');
+        alert("hi"+JSON.stringify(response));
+      })
+      .catch(error => alert("Error " + error));
+    alert("Button pressed "+ this.state.Username);
+    }
+
+    if(viewId=='register'){
+      alert("jello");
+      return(<RegisterUser/>);
+    }
     //Calling get api endpoint
-    fetch('http://192.168.1.10:3001/Users').then((response) => {return response.json()})
+    fetch('http://192.168.0.103:3001/Users',{
+    
+    headers:
+    {
+      'Access-Control-Allow-Origin' : '*'
+    }}).then((response) => {return response.json()})
     .then(response=>alert(JSON.stringify(response)))
     .catch((error) => {
             console.error(error);
           });
 
-    //Calling Post api endpoint
-    fetch("http://192.168.1.10:3001/Users/Authenticate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        userNm :"New User",
-        userPwd: "TempPwd"
-      })
-    })
-      .then(response => response.json())
-      .then(response => {
-        alert('hi'+JSON.stringify(response));
-      })
-      .catch(error => alert("Error " + error));
-    Alert.alert("Alert", "Button pressed "+viewId);
+    
   }
+
+  RegisterScreen({ navigation }) {
+    return (
+     <RegisterUser/>
+    );
+  }
+  register({ navigation }){
+    //navigation: RegisterUser;
+    alert("bluey");
+    return(
+      
+    navigation.navigate('RegisterUser')
+    );
+  }
+    
+//   const requestOptions = {
+//     method: 'POST',
+//     headers: { 
+//         'Content-Type': 'application/json',
+        
+//     },
+//     body: JSON.stringify({ userNm : 'Shrav',
+//         userPwd: 'NewPwd@01'})
+// };
+
+// fetch("http://192.168.0.103:3001/Users/Authenticate",requestOptions)
+// .then(response => response.json())
+// .then(response => {
+//         alert('hi'+JSON.stringify(response));
+//       })
+//       .catch(error => alert("Error " + error));
+//     alert("Button pressed "+ this.state.Username);
+//   }
+
+
 
   render() {
     return (
@@ -59,10 +114,10 @@ export default class LoginView extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Email"
-              keyboardType="email-address"
+              placeholder="Username"
+              keyboardType="default"
               underlineColorAndroid='transparent'
-              onChangeText={(email) => {this.setState({email}),(()=>{console.log('mona'+this.state['email'])})();}}/>
+              onChangeText={(Username) => {this.setState({Username})}}/>
         </View>
         
         <View style={styles.inputContainer}>
@@ -74,7 +129,7 @@ export default class LoginView extends Component {
               onChangeText={(password) => this.setState({password})}/>
         </View>
 
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() =>{ console.log(this.state['email']);this.onClickListener('login')}}>
+        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() =>{this.onClickListener('login')}}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
 
