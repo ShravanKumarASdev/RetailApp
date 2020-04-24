@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet,View,ScrollView,Dimensions,Image} from 'react-native';
+import {StyleSheet,View,ScrollView,Dimensions,Image,TouchableOpacity} from 'react-native';
 
 const DEVICE_WIDTH = Dimensions.get("window").width;
 
@@ -43,7 +43,8 @@ class ImageCarousel extends React.Component{
         const {images} = this.props;
         const {selectedIndex} = this.state;
         return (
-            <View style={{height:"30%", width:"100%"}}>
+            <TouchableOpacity style={{height:"20%", width:"100%"}} onPress={()=> alert(images[selectedIndex])
+                                                                                }>
                 <ScrollView 
                     horizontal 
                     pagingEnabled 
@@ -65,7 +66,7 @@ class ImageCarousel extends React.Component{
                         />
                     ))}
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 }

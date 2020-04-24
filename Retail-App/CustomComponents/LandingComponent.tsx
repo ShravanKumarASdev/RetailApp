@@ -13,6 +13,7 @@ import {
   Alert
 } from 'react-native';
 import { ImageCarousel } from './ImageCarousel';
+import { TextCarousel } from './TextCarousel';
 
 const images=[
     "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528__340.jpg",
@@ -21,13 +22,17 @@ const images=[
     "https://i.pinimg.com/236x/75/1b/cb/751bcb0a1c740f9d0bab419852717072.jpg",
     "https://image.shutterstock.com/image-photo/summer-background-flowers-nature-beautiful-260nw-1038824167.jpg"
 ];
+
+
 export default class LandingView extends Component {
+    selectedCategories=[];
     constructor(){
         super();
         this.state = {
             isLoading:true,
-            dataSource:[]
-        }
+            dataSource:[],
+            productCategories:[]
+        };
     }
 
     _renderItem = ({item}) => (
@@ -38,6 +43,18 @@ export default class LandingView extends Component {
             <Text style={styles.cardText}>{item.Category}</Text>
         </TouchableOpacity>
     );
+
+    filterProducts(selectedCategory:string){
+        if(this.selectedCategories.includes("'"+selectedCategory+"'")){
+            this.selectedCategories.splice(this.selectedCategories.indexOf("'"+selectedCategory+"'"),1);
+        }
+        else{
+            this.selectedCategories.push("'"+selectedCategory+"'");
+        }
+        let categories = this.selectedCategories.join(",");
+        categories=categories===''?'ALL':categories;
+        this.retrieveProducts(categories);
+    }
 
     render(){
         if(this.state.isLoading){
@@ -50,21 +67,23 @@ export default class LandingView extends Component {
         else{
             return(
                 <View style={styles.container}>
-                    <ImageCarousel images={images} styles={{height:"30%"}}/>
-                    <FlatList 
-                        styles={{height:"70%"}}
-                        data={this.state.dataSource}
-                        renderItem={this._renderItem}
-                        keyExtractor = {(item,index)=>index.toString()}
-                        numColumns={2}
-                    />
+                        <ImageCarousel images={images}/>
+                        <TextCarousel data={this.state.productCategories} filterProducts={this.filterProducts.bind(this)}/>                        
+                        <FlatList 
+                            data={this.state.dataSource}
+                            renderItem={this._renderItem}
+                            keyExtractor = {(item,index)=>index.toString()}
+                            numColumns={2}
+                        />
+
                 </View>
             );
         }
     }
 
-    componentDidMount(){
-        fetch('http://192.168.1.5:3001/Products').then((response) => {return response.json()})
+    retrieveProducts(categories:string){
+        let url ='http://192.168.1.10:3001/ProductsByCategory?categories="'+categories+'"';
+        fetch(url).then((response) => {return response.json()})
         .then((response)=>{
             this.setState({
                 isLoading:false,
@@ -74,6 +93,20 @@ export default class LandingView extends Component {
         .catch((error) => {
                 console.error(error);
               });
+    }
+
+    componentDidMount(){
+        this.retrieveProducts("ALL");
+
+              fetch('http://192.168.1.10:3001/Products/Categories').then((response) => {return response.json()})
+              .then((response)=>{
+                  this.setState({
+                    productCategories:response
+                })
+              })
+              .catch((error) => {
+                      console.error(error);
+                    });
     }
 }
 
