@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, FlatList} from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import Icon from "react-native-vector-icons/AntDesign";
+
 
 export default class Accordian extends Component{
 
@@ -17,8 +18,9 @@ export default class Accordian extends Component{
     return (
        <View>
             <TouchableOpacity style={styles.row} onPress={()=>this.toggleExpand()}>
+                <Icon name='right' color={"#fff"} size={20}/>
                 <Text style={[styles.title]}>{this.props.title}</Text>
-                <Icon name={this.state.expanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} size={30} color={"#fff"} />
+                <Icon name={this.state.expanded ? 'minus' : 'plus'} size={20} color={"#fff"} />
             </TouchableOpacity>
             <View style={styles.parentHr}/>
             {
@@ -31,7 +33,7 @@ export default class Accordian extends Component{
                     renderItem={({item, index}) =>
                         <View>
                             <TouchableOpacity style={[styles.childRow, styles.button, item.value ? styles.btnInActive:styles.btnActive]} onPress={()=>this.onClick(index)}>
-                                <Icon name={'check-circle'} size={24} color={item.value?'lightgray':'green'}/>
+                                <Icon name={'checkcircle'} size={24} color={item.value?'lightgray':'green'}/>
                                 <Text style={[styles.font, item.value?styles.itemInActive:styles.itemActive]}>{item.key}</Text>
                             </TouchableOpacity>
                             <View style={styles.childHr}/>
@@ -69,16 +71,18 @@ const styles = StyleSheet.create({
         fontSize:12
     },
     title:{
-        fontSize: 14,
+        fontSize: 20,
         fontWeight:'bold',
         color: '#fff',
     },
     itemActive:{
-        fontSize:12,
-        color:'#5c6360'
+        fontSize:15,
+        fontWeight:'bold',
+        color:'#415c50'
     },
     itemInActive:{
-        fontSize:12,
+        fontSize:15,
+        fontWeight:'bold',
         color:'darkgray'
     },
     buttonActive:{
@@ -88,16 +92,20 @@ const styles = StyleSheet.create({
         borderColor:'darkgray'
     },
     row:{
+        borderRadius:30,
+        alignSelf:'center',
+        width:'95%',
         flexDirection: 'row',
         justifyContent:'space-between',
-        height:50,
+        height:60,
         paddingLeft:25,
         paddingRight:18,
         alignItems:'center',
-        backgroundColor: '#5dba8f',
+        backgroundColor: '#2d7887',
     },
     childRow:{
         flexDirection:'row',
+        left:15
     },
     parentHr:{
         height:1,
@@ -106,8 +114,9 @@ const styles = StyleSheet.create({
     },
     childHr:{
         height:1,
+        alignSelf:'center',
         backgroundColor:'lightgray',
-        width:'100%'
+        width:'80%'
     },
     colorActive:{
         borderColor:'green'

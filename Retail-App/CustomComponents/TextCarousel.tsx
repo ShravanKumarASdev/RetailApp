@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Image, StyleSheet, Dimensions, Text, FlatList  } from 'react-native';
+import { View, ScrollView,TouchableOpacity, Image,ImageBackground, StyleSheet, Dimensions, Text, FlatList  } from 'react-native';
+import Icon from "react-native-vector-icons/AntDesign";
 
+const images={
+  'Cosmetics':require('..//assets//CosmeticsNormal.jpg'),
+  'Food and Beverage':require('..//assets//FoodnBeveragesNormal.jpg'),
+  'Hair Care Products':require('..//assets//HaircareNormal.jpg'),
+  'Stationery':require('..//assets//StationeryNormal.jpg')
+};
 
 export class TextCarousel extends Component {
   render() {
@@ -9,9 +16,14 @@ export class TextCarousel extends Component {
       return (
         <View
           style={styles.scrollContainer}>
-          <View style={{height:100, flex:1,
+          <ImageBackground
+            resizeMode={'stretch'} // or cover
+            style={{flex: 1}} // must be passed from the parent, the number may vary depending upon your screen size
+            source={require('..//assets//Bg12.jpg')} 
+          >
+          <View style={{height:"30%", flex:1,
                         flexDirection:'column'}}>
-            <FlatList style={{backgroundColor:'#F0FFFF', opacity:0.6}}
+            <FlatList
               data={data}
               horizontal={true}
               renderItem={({item , index})=>{
@@ -21,6 +33,7 @@ export class TextCarousel extends Component {
               }}>
             </FlatList>
           </View>
+          </ImageBackground>
         </View>
       );
     }
@@ -41,11 +54,20 @@ class HorizontalFlatListItem extends React.Component{
         return (
             <View
                 style={[styles.textContainer,this.state.isSelected?
-                    {borderColor:'#fff',borderWidth:3,backgroundColor:'#080a57'}:{borderColor:'gray',borderWidth:1}]}>
-                <Text onPress={()=>{this.props.filterProducts(this.props.item.category);this.flipisSelected();}}
-                   style={[styles.categoryInactive,this.state.isSelected?{fontWeight:'bold',color:'#fff'}:{fontWeight:'normal'}]}>
-                  {this.props.item.category}
+                    {borderBottomColor:'#fff',borderBottomWidth:5}:{}]}>
+              <TouchableOpacity onPress={()=>{this.props.filterProducts(this.props.item.Category);this.flipisSelected();}}>
+              {/* <Icon name='check' size={20} color={"black"}/> */}
+                <Image
+                  source={images[this.props.item.Category]}
+                  style={{ width: 55, height: 55, borderRadius: 15, alignSelf:'center'}}
+                /> 
+                <Text>
+                  <Text 
+                    style={[styles.categoryInactive,this.state.isSelected?{fontWeight:'bold'}:{fontWeight:'normal'}]}>
+                    {this.props.item.Category}
+                  </Text>
                 </Text>
+              </TouchableOpacity>
             </View>
         )
     }
@@ -53,21 +75,29 @@ class HorizontalFlatListItem extends React.Component{
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    height:"10%"
+    height:"23%",
+    alignContent:'center'
   },
   textContainer:{
     flex:1,
     flexDirection:'column',
-    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
     width:'80%',
-    borderRadius:10,
-    margin:4,
-    height:'90%'
+    borderRadius:20,
+    margin:10,
+    padding:3,
+    height:'80%'
   },
   categoryInactive:{
     fontSize:16,
     color:'black',
-    margin:16
+    margin:16,
+    fontFamily:'sans-serif-medium',
+    textAlign:'center',
+    alignSelf:'center',
+    alignContent:'center',
+    fontStyle:'italic'
   }
 });
 

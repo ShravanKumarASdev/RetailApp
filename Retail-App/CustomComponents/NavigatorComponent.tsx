@@ -4,6 +4,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import LandingView from './LandingComponent';
 import HomeComponent from './HomeComponent';
+import LoginView from './LoginComponent';
+import RegisterUser from './Register';
 
 export default class NavigatorComponent extends Component {
 
@@ -26,9 +28,24 @@ export default class NavigatorComponent extends Component {
   );
 }
 
+LoginScreen({ navigation }) {
+  return (
+   <LoginView/>
+  );
+}
+
 LandingScreen({ navigation }) {
-  return (<LandingView></LandingView>);
-} 
+  return (
+   <LandingView/>
+  );
+}
+
+RegisterScreen({ navigation }) {
+  return (
+   <RegisterUser/>
+  );
+}
+
 
 CategoryScreen({ navigation }) {
   return (<HomeComponent></HomeComponent>);
@@ -37,14 +54,14 @@ CategoryScreen({ navigation }) {
 render(){
     const Drawer = createDrawerNavigator();
     return(
-        <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={this.HomeScreen} />
-        <Drawer.Screen name="Notifications" component={this.NotificationsScreen} />
-        <Drawer.Screen name="Landing Page" component={this.LandingScreen} />
-        <Drawer.Screen name="Home Page" component={this.CategoryScreen} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-    );  
-}
-}
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Screen name="Home" component={this.LoginScreen} />
+          <Drawer.Screen name="Notifications" component={this.NotificationsScreen} />
+          <Drawer.Screen name="Landing Page" component={this.LandingScreen} />
+          <Drawer.Screen name="Home Page" component={this.CategoryScreen} />
+          <Drawer.Screen name="Register" component={this.RegisterScreen} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    )};
+  }

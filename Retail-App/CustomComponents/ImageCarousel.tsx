@@ -39,12 +39,15 @@ class ImageCarousel extends React.Component{
         };
     }
 
+    renderList(){
+
+    }
+
     render(){
         const {images} = this.props;
         const {selectedIndex} = this.state;
         return (
-            <TouchableOpacity style={{height:"20%", width:"100%"}} onPress={()=> alert(images[selectedIndex])
-                                                                                }>
+            <TouchableOpacity style={{height:"20%", width:"100%"}} onPress={()=> alert(images[selectedIndex])}>
                 <ScrollView 
                     horizontal 
                     pagingEnabled 
