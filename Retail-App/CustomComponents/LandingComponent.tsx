@@ -17,6 +17,9 @@ import {
 import { ImageCarousel } from './ImageCarousel';
 import { TextCarousel } from './TextCarousel';
 import Icon from "react-native-vector-icons/AntDesign";
+import { TileComponent } from './TileComponent';
+import { SubcategoriesComponent } from './SubcategoriesComponent';
+import { TileDetailComponent } from './TileDetailComponent';
 
 const images=[
     "https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528__340.jpg",
@@ -26,6 +29,7 @@ const images=[
     "https://image.shutterstock.com/image-photo/summer-background-flowers-nature-beautiful-260nw-1038824167.jpg"
 ];
 
+const subCategoryRedirectionCount=1;
 const subCategoryImages={
     'Snacks':require('..//assets//SnackCartoon.jpg'),
     'Fruits':require('..//assets//FruitsCartoon.jpg'),
@@ -43,7 +47,9 @@ export default class LandingView extends Component {
         this.state = {
             isLoading:true,
             dataSource:[],
-            productCategories:[]
+            productCategories:[],
+            selectedSubcategory:[],
+            isTileDetail:false
         };
     }
 
@@ -55,6 +61,13 @@ export default class LandingView extends Component {
             <Text style={styles.cardText}>{item.Category}</Text>
         </TouchableOpacity>
     );
+
+    renderTileDetail(){
+        alert('hi');
+        this.setState({
+            isTileDetail:true
+        });
+    }
 
     filterProducts(selectedCategory:string){
         if(this.selectedCategories.includes("'"+selectedCategory+"'")){
@@ -68,6 +81,18 @@ export default class LandingView extends Component {
         this.retrieveProducts(categories);
     }
 
+    redirectToCategories(subCategoryData){
+        this.setState({
+            selectedSubcategory:subCategoryData
+        });
+    }
+
+    redirectBack(){
+        this.setState({
+            selectedSubcategory:[]
+        });
+    }
+
     render(){
         if(this.state.isLoading){
             return(
@@ -77,72 +102,57 @@ export default class LandingView extends Component {
             );    
         }
         else{
-            return(
-                <View style={styles.container}>
-                        <TextCarousel data={this.state.productCategories} filterProducts={this.filterProducts.bind(this)}/>                        
-                        <ScrollView showsHorizontalScrollIndicator={false}>
-                                {this.state.dataSource.map((item)=>(
-                                    <React.Fragment>
-                                        {/* <View style={{justifyContent:'spa'}}> */}
-                                        <View style={{ flexDirection: 'row',alignItems:'center' }}>
-                                            <Image
-                                                source={subCategoryImages[item.category]}
-                                                style={{ width: 55, height: 55, borderRadius: 15, alignSelf:'center'}}
-                                            /> 
-                                            <Text style={{  textAlign:'center',fontFamily:'sans-serif-medium',fontStyle:'italic', color: '#fff',  fontSize:16, backgroundColor:'#3b9c9c',height:40,borderTopRightRadius:13,borderBottomRightRadius:13,padding:7}}>
-                                                {item.category}
-                                            </Text>
-                                            <View style={{position:'absolute',right:0}}>
-                                                <Icon name='right' size={20} color={"#3b9c9c"}/>
-                                            </View>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', width: '100%' }}>
-                                            <ScrollView
-                                                horizontal={true}
-                                                showsHorizontalScrollIndicator={false}>
-                                                {item.data.map((cardData,key)=>(
-                                                    <View elevation={5} style={{ margin: 5,borderRadius:15, backgroundColor:'#fff' }} key={key}>
-                                                        <Image
-                                                            source={{
-                                                            uri: `data:image/gif;base64,${cardData.Image}`
-                                                            }}
-                                                            style={{ width: 80, height: 80, margin: 10 }}
-                                                        />
-                                                        <View
-                                                            style={{
-                                                            flexDirection: 'row',
-                                                            justifyContent: 'space-between',
-                                                            }}>
-                                                            <Text
-                                                            style={{ color: '#494949', fontFamily:'sans-serif-medium',fontStyle:'italic', fontWeight: '200', textAlign:'center',padding:6 }}
-                                                            onPress={() => {
-                                                                alert('Title ' + cardData.Name + ' Clicked');
-                                                            }}>
-                                                            {cardData.Name}
-                                                            </Text>
-                                                            {/* <Text style={{ color: '#228B22' }}>⋮</Text> */}
-                                                        </View>
-                                                        <View
-                                                            style={{
-                                                            flexDirection: 'row',
-                                                            justifyContent: 'space-between',
-                                                            }}>
-                                                            <Text style={{ color: '#606070',fontFamily:'sans-serif-medium', fontStyle:'italic',fontWeight: '200',padding:6 }}>
-                                                            {cardData.Brand}
-                                                            </Text>
-                                                            {/* <Text style={{ color: '#228B22' }}>{cardData.CategoryId}</Text> */}
-                                                        </View>
-                                                    </View>
-                                                ))}
-                                        </ScrollView>
-                                    </View>            
-                                </React.Fragment>    
-                        ))}
-                        </ScrollView>
-                </View>
-            );
+                if(this.state.selectedSubcategory.length==0){
+                    if(this.state.isTileDetail!==true)
+                    {
+                        return(
+                        <View style={styles.container}>
+                                <TextCarousel data={this.state.productCategories} filterProducts={this.filterProducts.bind(this)}/>                        
+                                <ScrollView showsHorizontalScrollIndicator={false}>
+                                        {this.state.dataSource.map(
+                                            (item)=>(
+                                            <React.Fragment>
+                                                <View style={{ flexDirection: 'row',alignItems:'center' }}>
+                                                    <Image
+                                                        source={subCategoryImages[item.category]}
+                                                        style={{ width: 55, height: 55, borderRadius: 15, alignSelf:'center'}}
+                                                    /> 
+                                                    <Text style={{  textAlign:'center',fontFamily:'sans-serif-medium',fontStyle:'italic', color: '#fff',  fontSize:16, backgroundColor:'#3b9c9c',height:40,borderTopRightRadius:13,borderBottomRightRadius:13,padding:7}}>
+                                                        {item.category}
+                                                    </Text>
+                                                    {item.data.length>subCategoryRedirectionCount &&
+                                                        <TouchableOpacity onPress={()=>this.redirectToCategories(item)} style={{position:'absolute',right:0}}>
+                                                            <View>
+                                                                <Icon name='rightcircle' size={25} color={"#3b9c9c"}/>
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                    }
+                                                </View>
+                                                <View style={{ flexDirection: 'row', width: '100%' }}>
+                                                    <ScrollView
+                                                        horizontal={true}
+                                                        showsHorizontalScrollIndicator={false}>
+                                                        {item.data.map((cardData,key)=>(
+                                                            <TileComponent data={cardData} renderTileDetail={this.renderTileDetail.bind(this)}></TileComponent>
+                                                        ))}
+                                                </ScrollView>
+                                            </View>            
+                                        </React.Fragment>    
+                                ))}
+                                </ScrollView>
+                        </View>);
+                    }
+                    else{
+                        return(
+                        <TileDetailComponent data={this.state.dataSource[0]['data'][0]}></TileDetailComponent>);
+                    }
+                }
+                else{
+                    return(
+                    <SubcategoriesComponent data={this.state.selectedSubcategory} redirectBack={this.redirectBack.bind(this)}></SubcategoriesComponent>);
+                }
+            }
         }
-    }
 
     retrieveProducts(categories:string){
         let url ='http://192.168.1.6:3001/ProductsByCategory?categories="'+categories+'"';
@@ -153,10 +163,12 @@ export default class LandingView extends Component {
             this.subCategories.forEach(function(category) {
                 let temp={};
                 temp['category'] = category;
+                response.forEach(function (element) {
+                    element.Count = 0;
+                  });
                 temp['data']=response.filter(item=>item.Subcategory===category);
                 data.push(temp);
             });
-            alert(data.length);
             this.setState({
                 isLoading:false,
                 dataSource:data
@@ -185,6 +197,7 @@ export default class LandingView extends Component {
 const styles=StyleSheet.create({
     container:{
         borderTopWidth:30,
+        paddingLeft:5,
         height:"100%",
         flex:1,
         justifyContent:'center',
@@ -225,5 +238,8 @@ const styles=StyleSheet.create({
         paddingLeft:15,
         fontFamily:'sans-serif-medium',
         fontStyle:'italic'
-      }
+      },
+      hidden: { 
+          display:'none'
+        }
 });
